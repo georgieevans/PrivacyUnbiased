@@ -1,10 +1,10 @@
 #' OLS differential privacy
 #'
-#' This function works similarly to \code{\link[base]{lm}}. It takes a formula and data and
+#' This function works similarly to \code{\link{lm}}. It takes a formula and data and
 #' returns an lmdp object containing bias corrected OLS coefficients and standard errors. The output can be summarised
 #' by inputting it as an argument to \code{\link{summary.lmdp}}.
 #'
-#' @param formula An \code{\link[base]{lm}} style formula.
+#' @param formula An \code{\link{lm}} style formula.
 #' @param data The data to estimate the model on. The first row of data should contain the DP
 #' error associated with that column.
 #' @param bootstrap_var If FALSE, then the variance is estimated via simulation.
@@ -204,7 +204,7 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500)
 #' Summary lmdp
 #'
 #' This function takes an lmdp object as input and produces a summary table comparable to
-#' a summary of an \code{\link[base]{lm}} object.
+#' a summary of an \code{\link{lm}} object.
 #'
 #' @param lmdp_object Output from \code{\link{lmdp}}
 #' @return Table of consistent coefficient estimates and corrresponding standard errors, t-stats

@@ -10,14 +10,15 @@
 #' \item{bias_correct}{Vector of bias corrected coefficients}
 #' \item{x_prime_x}{X'X matrix to be used in variance estimationo}
 #' @export
-betaTilde <- function(coef, S, X, N){
+betaTilde <- function(coef, S, X, N)
+  {
   Q <- t(X)%*%X
   omega <- (1/N)*Q - S
   C <- solve(Q/N)%*%omega
   bias_correct  <- as.numeric(solve(C)%*%coef)
   names(bias_correct) <- names(coef)
   return(list(bias_correct = bias_correct, x_prime_x = Q))
-}
+  }
 
 
 #' Bias Correct OLS model with interaction term
@@ -35,7 +36,8 @@ betaTilde <- function(coef, S, X, N){
 #' \item{bias_correct}{Vector of bias corrected coefficients}
 #' \item{x_prime_x}{X'X matrix to be used in variance estimationo}
 #' @export
-betaTildeInt <- function(coef, S, X, N, int1, int2){
+betaTildeInt <- function(coef, S, X, N, int1, int2)
+  {
   # Construct Omega
   Q <- t(X)%*%X
   omega <- (1/N)*Q - S
@@ -53,7 +55,7 @@ betaTildeInt <- function(coef, S, X, N, int1, int2){
   bias_correct  <- as.numeric(solve(C)%*%coef)
   names(bias_correct) <- names(coef)
   return(list(bias_correct = bias_correct, x_prime_x = Q))
-}
+  }
 
 
 #' Bias Correct OLS model with squared variable
@@ -70,8 +72,8 @@ betaTildeInt <- function(coef, S, X, N, int1, int2){
 #' \item{bias_correct}{Vector of bias corrected coefficients}
 #' \item{x_prime_x}{X'X matrix to be used in variance estimation}
 #' @export
-betaTildeSq <- function(coef, S, X, N, index_sq){
-
+betaTildeSq <- function(coef, S, X, N, index_sq)
+  {
   # Construct X'Z
   Q <- t(X)%*%X
   X_Z <- Q - N*S
@@ -93,7 +95,7 @@ betaTildeSq <- function(coef, S, X, N, index_sq){
   bias_correct  <- as.numeric(solve(C)%*%coef)
   names(bias_correct) <- names(coef)
   return(list(bias_correct = bias_correct, x_prime_x = Q))
-}
+  }
 
 
 #' Estimates \eqn{\sigma^2} from regression
@@ -106,9 +108,10 @@ betaTildeSq <- function(coef, S, X, N, index_sq){
 #' @param X Design matrix that produced OLS coefficients
 #' @return Estimate of \eqn{\sigma^2}
 #' @export
-sigmaSq <- function(Y, bias_correct, S, X){
+sigmaSq <- function(Y, bias_correct, S, X)
+  {
   var(Y - as.numeric(bias_correct%*%t(X))) - t(bias_correct^2)%*%diag(S)
-}
+  }
 
 #' Estimates \eqn{Cov(X_k'y, X_j'X_m)}
 #'
@@ -123,10 +126,11 @@ sigmaSq <- function(Y, bias_correct, S, X){
 #' @param N Number of rows in X
 #' @return Estimate of \eqn{Cov(X_k'y, X_j'X_m)}
 #' @export
-covXyXX <- function(k, j, m, S, X, Y, N){
+covXyXX <- function(k, j, m, S, X, Y, N)
+  {
   cov_est <-  Y%*%X[, m]%*%S[k,j] + Y%*%X[, j]%*%S[k,m]
   return(cov_est)
-}
+  }
 
 
 #' Estimates \eqn{Cov(X_k'y, X_j'y)}
@@ -143,11 +147,12 @@ covXyXX <- function(k, j, m, S, X, Y, N){
 #' @param N Number of rows in X
 #' @return Estimate of \eqn{Cov(X_k'y, X_j'y)}
 #' @export
-covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N){
+covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N)
+  {
   Z_prime_Z <- x_prime_x - N*S
   cov_est <- sigma_sq*Z_prime_Z[k,j] +  S[k, j]*(t(Y)%*%Y)
   return(cov_est)
-}
+  }
 
 #' Estimates \eqn{Cov(X_k'X_j, X_m'X_l)}
 #'
@@ -163,11 +168,12 @@ covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N){
 #' @param N Number of rows in X
 #' @return Estimate of \eqn{Cov(X_k'X_j, X_m'X_l)}
 #' @export
-covXX <- function(k, j, l, m, S, X, x_prime_x, N){
+covXX <- function(k, j, l, m, S, X, x_prime_x, N)
+  {
   omega <- x_prime_x - N*S
   cov_est <- omega[k,l]*S[j, m] + omega[k, m]*S[j,l] + omega[j, l]*S[k,m] + omega[j, m]*S[k,l]  + 2*N*(S[k,l])*(S[j,m])
   return(cov_est)
-}
+  }
 
 #' Draw re-sampled estimates
 #'
@@ -180,8 +186,8 @@ covXX <- function(k, j, l, m, S, X, x_prime_x, N){
 #' @param N Number of rows in X
 #' @return One draw of vector of re-sample b and \eqn{\tilde{\beta}}
 #' @export
-simulateEst <- function(X, mu, Sigma, S, N){
-
+simulateEst <- function(X, mu, Sigma, S, N)
+  {
   Sigma <- as.matrix(Matrix::nearPD(Sigma[-1, -1])$mat)
   draws <- c(mu[1], mvtnorm::rmvnorm(1, mean = mu[-1], sigma = Sigma)) # removing the column of 1's
   K <- ncol(X)
@@ -211,7 +217,7 @@ simulateEst <- function(X, mu, Sigma, S, N){
   bc_star <- c(b_star, bc_star)
 
   return(bc_star)
-}
+  }
 
 #' Simulate variance
 #'
@@ -231,8 +237,8 @@ simulateEst <- function(X, mu, Sigma, S, N){
 #' \item{sims}{Draws of b and \eqn{\tilde{\beta}}}
 #' \item{Sigma}{Estimate of variance-covariance that was used for simulation}
 #' @export
-varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y){
-
+varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y)
+  {
   # Extract upper triangle
   x_x <- unlist(lapply(1:nrow(x_prime_x), FUN = function(i) as.numeric(x_prime_x[i, c(i:ncol(x_prime_x))])))
 
@@ -276,7 +282,7 @@ varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y){
   sims <- do.call(rbind, lapply(1:nsims, FUN = function(i) simulateEst(X = X, mu = mu, Sigma = Sigma, S = S, N = N)))
 
   return(list(sims = sims, Sigma = Sigma))
-}
+  }
 
 
 #' Bootstrap variance
@@ -293,8 +299,8 @@ varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y){
 #' @param int2 Column index of second interaction variable
 #' @param index_sq Column index of second interaction variable
 #' @return Bootstrap samples of b and \eqn{\tilde{\beta}}
-varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index_sq){
-
+varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index_sq)
+  {
   boot_dist <- do.call(rbind, lapply(1:nsims, FUN = function(i){
 
     # Resample data
@@ -322,5 +328,5 @@ varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index
   }))
 
   return(boot_dist)
-}
+  }
 
