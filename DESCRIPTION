@@ -3,8 +3,8 @@ Title: Unbiased Estimates from Privacy Protected Data
 Version: 0.1
 Date: 2020-01-30
 Authors@R:  c(
-          person("Georgina", "Evans", email = "georginaevans@g.harvard.edu"),
-          person("Gary", "King",email = "king@harvard,edu")
+          person("Georgina", "Evans", email = "georginaevans@g.harvard.edu", role = c("aut", "cre")),
+          person("Gary", "King",email = "king@harvard.edu", role = c("aut"))
           )
 Description: Corrects coefficient estimates from OLS regression when covariates contain known measurement error.
     Provides two methods for obtaining honest uncertainty estimates, using either a simulation procedure or a
