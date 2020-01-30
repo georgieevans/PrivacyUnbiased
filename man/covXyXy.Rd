@@ -17,7 +17,7 @@ covXyXy(k, j, S, X, Y, sigma_sq, x_prime_x, N)
 
 \item{Y}{Dependent variable from OLS model}
 
-\item{sigma_sq}{estimate of \Sigma^2}
+\item{sigma_sq}{estimate of \eqn{\sigma^2}}
 
 \item{x_prime_x}{X'X}
 

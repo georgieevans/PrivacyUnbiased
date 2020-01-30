@@ -138,7 +138,7 @@ covXyXX <- function(k, j, m, S, X, Y, N){
 #' @param S Matrix of error terms. Dimensions must be ncol(X) x ncol(X)
 #' @param X Design matrix that produced OLS coefficients
 #' @param Y Dependent variable from OLS model
-#' @param sigma_sq estimate of \Sigma^2
+#' @param sigma_sq estimate of \eqn{\sigma^2}
 #' @param x_prime_x X'X
 #' @param N Number of rows in X
 #' @return Estimate of Cov(X_k'y, X_j'y)
