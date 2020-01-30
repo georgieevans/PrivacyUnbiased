@@ -161,7 +161,7 @@ covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N){
 #' @param X Design matrix that produced OLS coefficients
 #' @param x_prime_x X'X
 #' @param N Number of rows in X
-#' @return Estimate of Cov(X_k'X_j, X_m'X_{\ell})
+#' @return Estimate of Cov(X_k'X_j, X_m'X_l)
 #' @export
 covXX <- function(k, j, l, m, S, X, x_prime_x, N){
   omega <- x_prime_x - N*S
