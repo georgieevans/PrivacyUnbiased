@@ -1,4 +1,4 @@
-#' OLS dififferential privacy
+#' OLS differential privacy
 #'
 #' This function works similarly to \code{\link[base]{lm}}. It takes a formula and data and
 #' returns an lmdp object containing bias corrected OLS coefficients and standard errors. The output can be summarised
@@ -12,7 +12,7 @@
 #' FALSE unless model contains interaction terms/squared terms or fewer than 10000 obsesrvations
 #' @param nsims_var Number of bootstrap samples/simulations. Default is 500
 #' @return
-#' Returns a an object of class lmdp containing:
+#' Returns an object of class lmdp containing:
 #' \item{b}{Inconsistent OLS coefficient estimate}
 #' \item{b_vcov}{Estimate of variance covariance of b}
 #' \item{beta_tilde}{Consistent estimates of coefficients, \eqn{\tilde{\beta}}}
