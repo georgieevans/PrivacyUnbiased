@@ -121,7 +121,7 @@ sigmaSq <- function(Y, bias_correct, S, X){
 #' @param X Design matrix that produced OLS coefficients
 #' @param Y Dependent variable from OLS model
 #' @param N Number of rows in X
-#' @return Estimate of Cov(X_k'y, X_j'X_m)
+#' @return Estimate of \eqn{Cov(X_k'y, X_j'X_m)}
 #' @export
 covXyXX <- function(k, j, m, S, X, Y, N){
   cov_est <-  Y%*%X[, m]%*%S[k,j] + Y%*%X[, j]%*%S[k,m]
@@ -141,7 +141,7 @@ covXyXX <- function(k, j, m, S, X, Y, N){
 #' @param sigma_sq estimate of \eqn{\sigma^2}
 #' @param x_prime_x X'X
 #' @param N Number of rows in X
-#' @return Estimate of Cov(X_k'y, X_j'y)
+#' @return Estimate of \eqn{Cov(X_k'y, X_j'y)}
 #' @export
 covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N){
   Z_prime_Z <- x_prime_x - N*S
@@ -161,7 +161,7 @@ covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N){
 #' @param X Design matrix that produced OLS coefficients
 #' @param x_prime_x X'X
 #' @param N Number of rows in X
-#' @return Estimate of Cov(X_k'X_j, X_m'X_l)
+#' @return Estimate of \eqn{Cov(X_k'X_j, X_m'X_l)}
 #' @export
 covXX <- function(k, j, l, m, S, X, x_prime_x, N){
   omega <- x_prime_x - N*S
@@ -285,7 +285,7 @@ varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y){
 #' distribution of \eqn{\tilde{\beta}} and b.
 #' @param Y Dependent variable from OLS model
 #' @param X Design matrix that produced OLS coefficients
-#' @param S Matrix of error terms. Dimensions must be length(coef) x length(coef)
+#' @param S Matrix of error terms. Dimensions must be ncol(X) x ncol(X)
 #' @param nsims Number of times to draw from a MVN
 #' @param int_vars Vector of interaction variables
 #' @param sq_vars Vector of squared variables
