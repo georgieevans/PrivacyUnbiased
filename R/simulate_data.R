@@ -8,7 +8,6 @@
 #' \item{original_data}{Data before DP noise added}
 #' \item{data_errror}{Data after DP noise added }
 #' @export
-
 genData <- function(N)
   {
   Y_err <- 2
