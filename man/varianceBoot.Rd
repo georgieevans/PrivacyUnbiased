@@ -11,7 +11,7 @@ varianceBoot(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index_sq)
 
 \item{X}{Design matrix that produced OLS coefficients}
 
-\item{S}{Matrix of error terms. Dimensions must be length(coef) x length(coef)}
+\item{S}{Matrix of error terms. Dimensions must be ncol(X) x ncol(X)}
 
 \item{nsims}{Number of times to draw from a MVN}
 

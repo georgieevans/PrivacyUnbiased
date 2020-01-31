@@ -15,5 +15,5 @@ and p-values.
 }
 \description{
 This function takes an lmdp object as input and produces a summary table comparable to
-a summary of an \code{\link[base]{lm}} object.
+a summary of an \code{\link{lm}} object.
 }

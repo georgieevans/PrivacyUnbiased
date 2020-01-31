@@ -33,10 +33,24 @@ for (pkg in pkgs) {
   }
 }
 
-devtools::use_vignette("PrivacyUnbiased")
-
+devtools::install_github("georgieevans/PrivacyUnbiased")
 library(PrivacyUnbiased)
 
 ```
 
-## 
+## Simple example
+
+```{r sim data, echo = FALSE}
+N <- 100000
+data <- genData(N)
+```
+
+We use some hypothetical data to demonstrate how the packages main functions can be used. 
+
+```{r}
+
+
+
+
+
+```

@@ -2,12 +2,12 @@
 % Please edit documentation in R/fit_model.R
 \name{lmdp}
 \alias{lmdp}
-\title{OLS dififferential privacy}
+\title{OLS differential privacy}
 \usage{
 lmdp(formula, data, bootstrap_var = FALSE, nsims_var = 500)
 }
 \arguments{
-\item{formula}{An \code{\link[base]{lm}} style formula.}
+\item{formula}{An \code{\link{lm}} style formula.}
 
 \item{data}{The data to estimate the model on. The first row of data should contain the DP
 error associated with that column.}
@@ -19,7 +19,7 @@ FALSE unless model contains interaction terms/squared terms or fewer than 10000 
 \item{nsims_var}{Number of bootstrap samples/simulations. Default is 500}
 }
 \value{
-Returns a an object of class lmdp containing:
+Returns an object of class lmdp containing:
 \item{b}{Inconsistent OLS coefficient estimate}
 \item{b_vcov}{Estimate of variance covariance of b}
 \item{beta_tilde}{Consistent estimates of coefficients, \eqn{\tilde{\beta}}}
@@ -30,7 +30,7 @@ Returns a an object of class lmdp containing:
 \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
 }
 \description{
-This function works similarly to \code{\link[base]{lm}}. It takes a formula and data and
+This function works similarly to \code{\link{lm}}. It takes a formula and data and
 returns an lmdp object containing bias corrected OLS coefficients and standard errors. The output can be summarised
 by inputting it as an argument to \code{\link{summary.lmdp}}.
 }

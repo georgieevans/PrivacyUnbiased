@@ -4,10 +4,10 @@ Version: 0.1
 Date: 2020-01-30
 Authors@R:  c(
           person("Georgina", "Evans", email = "georginaevans@g.harvard.edu", role = c("aut", "cre")),
-          person("Gary", "King",email = "king@harvard.edu", role = c("aut"))
+          person("Gary", "King", email = "king@harvard.edu", role = c("aut"))
           )
-Description: Corrects coefficient estimates from least squares regression when covariates contain known levels of Gaussian measurement error.
-    Provides two methods for obtaining honest uncertainty estimates, using either a fast simulation procedure or a standard
+Description: Corrects coefficient estimates from OLS regression when covariates contain known measurement error.
+    Provides two methods for obtaining honest uncertainty estimates, using either a simulation procedure or a
     bootstrap. 
 License: 
 Encoding: UTF-8

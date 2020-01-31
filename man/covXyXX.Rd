@@ -22,7 +22,7 @@ covXyXX(k, j, m, S, X, Y, N)
 \item{N}{Number of rows in X}
 }
 \value{
-Estimate of Cov(X_k'y, X_j'X_m)
+Estimate of \eqn{Cov(X_k'y, X_j'X_m)}
 }
 \description{
 This function estimates components of variance-covariance matrix to subsequently
