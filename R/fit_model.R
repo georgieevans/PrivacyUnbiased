@@ -99,7 +99,7 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500)
                                x_prime_x = x_prime_x, x_y = x_y)
 
       # Was vc est PD
-      vc_pos_def <- is.positive.definite(var_sims$Sigma[-1, -1])
+      vc_pos_def <-  matrixcalc::is.positive.definite(var_sims$Sigma[-1, -1])
 
       if(vc_pos_def == FALSE){
         warning("VC matrix not positive definite")

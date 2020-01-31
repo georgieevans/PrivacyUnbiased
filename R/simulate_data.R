@@ -34,7 +34,7 @@ genData <- function(N)
 
   s1 <- 2
   s2 <- 1
-  s3 <- 3
+  s3 <- 1
   V1 <- rnorm(N, 0, s1)
   V2 <- rnorm(N, 0, s2)
   V3 <- rnorm(N, 0, s3)

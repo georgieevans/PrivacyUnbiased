@@ -196,7 +196,7 @@ simulateEst <- function(X, mu, Sigma, S, N)
   Q_star <- matrix(0, K, K)
   to <- length(draws) - ncol(X)
   draws_x_x <- draws[c(1:to)]
-  upperTriangle(Q_star, diag = TRUE, byrow = TRUE) <- draws_x_x
+  gdata::upperTriangle(Q_star, diag = TRUE, byrow = TRUE) <- draws_x_x
   Q_star <- as.matrix(Matrix::forceSymmetric(Q_star, uplo="U"))
 
   # Construct X'y
