@@ -14,6 +14,29 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(PrivacyUnbiased)
 ```
+
+## Installing PrivacyUnbiased 
+
+To install `PrivacyUnbiased`, run:
+
+```{r, eval = FALSE}
+
+pkgs <- c("devtools", "Matrix", "mvtnorm")
+
+for (pkg in pkgs) {
+  if (!require(pkg, character.only = T)) {
+    install.packages(pkg)
+    library(pkg)
+  }
+}
+
+devtools::use_vignette("PrivacyUnbiased")
+
+library(PrivacyUnbiased)
+
+```
+
+## 
