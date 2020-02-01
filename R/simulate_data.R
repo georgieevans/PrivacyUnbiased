@@ -39,7 +39,7 @@ genData <- function(N)
   X3 <- Z3 + rnorm(N, 0, s3)
 
   data_error <- data.frame(Y = Y, X1 = X1, X2 = X2, X3 = X3)
-  err_vec <- data.frame(Y = 0, X1 = s1^2, X2 = s2^2, X3 = s3^2)
+  err_vec <- data.frame(Y = 0, X1 = s1, X2 = s2, X3 = s3)
   data_error <- as.data.frame(rbind(err_vec, data_error))
 
   return(list(private_data = original_data, dp_data = data_error))
