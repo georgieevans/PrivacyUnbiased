@@ -35,6 +35,8 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
     S_vec <- rep(noise^2, ncol(data))
   }
 
+  N <- nrow(data)
+
   # Run OLS
   reg <- lm(formula, data = data)
   b <- coef(reg)
