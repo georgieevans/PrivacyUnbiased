@@ -6,7 +6,7 @@
 #'
 #' @param formula An \code{\link{lm}} style formula.
 #' @param data The data to estimate the model on. The first row of data should contain the DP
-#' error associated with that column.
+#' standard error associated with that column.
 #' @param bootstrap_var If FALSE, then the variance is estimated via simulation.
 #' If TRUE then the variance covariance matrix is estimated via bootstrap methods. Default is
 #' FALSE unless model contains interaction terms/squared terms or fewer than 10000 obsesrvations
@@ -23,11 +23,15 @@
 #' \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
 #' @export
 
-lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500)
+lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = NULL)
   {
 
   # Construct S vector
-  S_vec <- as.numeric(data[1, ])
+  if(is.null(noise)){
+  S_vec <- as.numeric(data[1, ])^2
+  }else{
+    S_vec <- rep(noise^2, ncol(data))
+  }
 
   # Remove error row
   data <- data[-1, ]

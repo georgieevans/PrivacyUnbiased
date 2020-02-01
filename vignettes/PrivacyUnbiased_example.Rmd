@@ -1,11 +1,8 @@
 ---
 title: "PrivacyUnbiased"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{PrivacyUnbiased}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: pdf_document
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -71,7 +68,7 @@ summary(lmdp_test)
 ```
 
 
-It is informative too compare this output from `lm()` to see the impact of bias correction: 
+It is informative to compare this to the estimates produced from `lm()` to see the impact of our bias correction: 
 
 ```{r}
 
