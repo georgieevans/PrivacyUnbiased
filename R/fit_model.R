@@ -6,11 +6,12 @@
 #'
 #' @param formula An \code{\link{lm}} style formula.
 #' @param data The data to estimate the model on. The first row of data should contain the DP
-#' standard error associated with that column.
+#' standard error associated with that column unless noise argument is not NULL.
 #' @param bootstrap_var If FALSE, then the variance is estimated via simulation.
 #' If TRUE then the variance covariance matrix is estimated via bootstrap methods. Default is
 #' FALSE unless model contains interaction terms/squared terms or fewer than 10000 obsesrvations
 #' @param nsims_var Number of bootstrap samples/simulations. Default is 500
+#' @param noise Set a default DP standard error for every column of the data
 #' @return
 #' Returns an object of class lmdp containing:
 #' \item{b}{Inconsistent OLS coefficient estimate}
@@ -26,15 +27,13 @@
 lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = NULL)
   {
 
-  # Construct S vector
+  # Construct S vector and remove error row if included
   if(is.null(noise)){
   S_vec <- as.numeric(data[1, ])^2
+  data <- data[-1, ]
   }else{
     S_vec <- rep(noise^2, ncol(data))
   }
-
-  # Remove error row
-  data <- data[-1, ]
 
   # Run OLS
   reg <- lm(formula, data = data)

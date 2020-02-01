@@ -16,7 +16,7 @@ genData <- function(N)
   # Draw the true X's
   Z1_mean <- 7
   Z2_mean <- 9
-  Z3_mean <- 10
+  Z3_mean <- 3
   Z1 <- rpois(N, Z1_mean)
   Z2 <- Z1*corr + rpois(N, Z2_mean)
   Z3 <- Z2*corr + rpois(N, Z3_mean)
@@ -42,7 +42,7 @@ genData <- function(N)
   err_vec <- data.frame(Y = 0, X1 = s1^2, X2 = s2^2, X3 = s3^2)
   data_error <- as.data.frame(rbind(err_vec, data_error))
 
-  return(list(original_data = original_data, data_error = data_error))
+  return(list(private_data = original_data, dp_data = data_error))
 
   }
 

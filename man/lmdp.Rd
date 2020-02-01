@@ -4,19 +4,22 @@
 \alias{lmdp}
 \title{OLS differential privacy}
 \usage{
-lmdp(formula, data, bootstrap_var = FALSE, nsims_var = 500)
+lmdp(formula, data, bootstrap_var = FALSE, nsims_var = 500,
+  noise = NULL)
 }
 \arguments{
 \item{formula}{An \code{\link{lm}} style formula.}
 
 \item{data}{The data to estimate the model on. The first row of data should contain the DP
-error associated with that column.}
+standard error associated with that column unless noise argument is not NULL.}
 
 \item{bootstrap_var}{If FALSE, then the variance is estimated via simulation.
 If TRUE then the variance covariance matrix is estimated via bootstrap methods. Default is
 FALSE unless model contains interaction terms/squared terms or fewer than 10000 obsesrvations}
 
 \item{nsims_var}{Number of bootstrap samples/simulations. Default is 500}
+
+\item{noise}{Set a default DP standard error for every column of the data}
 }
 \value{
 Returns an object of class lmdp containing:
