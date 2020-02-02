@@ -151,6 +151,9 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
       beta_tilde <- bias_correct$bias_correct
       x_prime_x <- bias_correct$x_prime_x
 
+      # Estimate sigma^2
+      sigma_sq <- sigmaSq(Y = Y, bias_correct = beta_tilde, S = S, X = X)
+
       # Variance
       b_index <- 1:length(b)
       beta_tilde_index <- (length(b) + 1):(2*length(b))
@@ -176,6 +179,9 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
       bias_correct <- betaTildeSq(coef = b, S = S, X = X, N = N, index_sq = index_sq)
       beta_tilde <- bias_correct$bias_correct
       x_prime_x <- bias_correct$x_prime_x
+
+      # Estimate sigma^2
+      sigma_sq <- sigmaSq(Y = Y, bias_correct = beta_tilde, S = S, X = X)
 
       # Variance
       b_index <- 1:length(b)
