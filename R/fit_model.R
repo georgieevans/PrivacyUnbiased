@@ -200,7 +200,7 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
     beta_tilde = beta_tilde,
     beta_tilde_vcov = beta_tilde_vcov,
     var_sims = var_sims,
-   # Sigma_sq_hat = sigma_sq,
+   Sigma_sq_hat = sigma_sq,
     vc_pos_def = vc_pos_def,
     boot = boot
   )
