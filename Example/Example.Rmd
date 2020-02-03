@@ -7,7 +7,7 @@ bibliography: documentation.bib
 ---
   
 ```{r setup, echo = FALSE}
-library(PrivacyUnbiased)
+suppressMessages(library(PrivacyUnbiased))
 ```
 
 
