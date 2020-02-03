@@ -1,3 +1,3 @@
-.onAttach <- function(libname, pkgname) {
+.onLoad <- function(libname, pkgname) {
   packageStartupMessage("Click here for overview of PrivacyUnbiased: bit.ly/PrivUexample")
 }
