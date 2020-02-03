@@ -137,7 +137,6 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
   }else{
 
     if(length(int_vars) > 0){
-
       # Interaction model
       int_names <- unlist(strsplit(int_vars, split = ":"))
       int1 <- which(colnames(X) == int_names[1])
