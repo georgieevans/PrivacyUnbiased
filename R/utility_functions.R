@@ -315,7 +315,7 @@ varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index
       bias_correct <- betaTilde(coef = b_star, S = S, X = X_star, N = N)
       bc_star <- bias_correct$bias_correct
     }else{
-      if(length(int1) > 0){
+      if(!is.na(int1)){
         bias_correct <- betaTildeInt(coef = b_star, S = S, X = X_star, N = N, int1 = int1, int2 = int2)
         bc_star <- bias_correct$bias_correct
       }else{
