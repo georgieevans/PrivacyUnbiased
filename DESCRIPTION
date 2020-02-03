@@ -8,7 +8,8 @@ Authors@R:  c(
           )
 Description: Corrects coefficient estimates from OLS regression when covariates contain known measurement error.
     Provides two methods for obtaining honest uncertainty estimates, using either a simulation procedure or a
-    bootstrap. 
+    bootstrap. Implements "Statistically Valid Inferences from Differentially Private Data Releases"; See 
+    http://garyking.org/dpd
 License: 
 Encoding: UTF-8
 LazyData: true
