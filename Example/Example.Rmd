@@ -1,0 +1,179 @@
+---
+title: "PrivacyUnbiased"
+output:  
+  pdf_document:
+      citation_package: natbib
+bibliography: documentation.bib
+---
+  
+```{r setup, echo = FALSE}
+library(PrivacyUnbiased)
+```
+
+
+
+##  Introduction to PrivacyUnbiased 
+
+This package implements methods developed in: 
+
+\begin{itemize}
+\item Evans, Georgina, and Gary King (2020): \textit{“Statistically Valid Inferences from Differentially Private Data Releases"}. In: URL: \url{https://gking.harvard.edu/dpd}.
+\end{itemize}
+
+In a major development for research data sharing, data providers are beginning to supplement insecure privacy protection strategies, such as "de-identification" with a formal approach called "differential privacy". One version of differential privacy adds specially calibrated random noise to a dataset, which is then released to researchers. This offers mathematical guarantees for the privacy of research subjects while still making it possible to learn about aggregate patterns of interest. Unfortunately, adding random noise creates measurement error, which, if ignored, induces statistical bias --- including in different situations attenuation, exaggeration, switched signs, and incorrect uncertainty estimates. The procedures implemented in `PrivacyUnbiased` account for these biases, producing statistically consistent point estimates from differentially private data. 
+
+`PrivacyUnbiased`, which corrects statistical problems with privacy protective procedures added to data, is designed to complement `UnbiasedPrivacy`, which corrects statistical problems with privacy protective procedures added to the results of statistical analyses [@dp1].
+
+## Installing PrivacyUnbiased 
+
+To install `PrivacyUnbiased`, run:
+  
+```{r, eval = FALSE}
+devtools::install_github("georgieevans/PrivacyUnbiased")
+library(PrivacyUnbiased)
+
+```
+
+## Example
+
+We demonstrate the capabilities of `PrivacyUnbiased` by simulating the scenario described above. We start with a simulated hypothetical private data set (`private_data`). We then add random error to every cell of the data by drawing errors, $\epsilon_{ik}$, from a mean $0$ normal distribution, $\epsilon_{ik} \sim \mathcal{N}(0, \sigma_k^2)$. We set $\sigma_k$ for each of the $k$ columns of the data.  This produces a differentially private data set (`dp_data`). In practice, the data analyst would not have access to `private_data` and would only be able to observe `dp_data`.
+
+This example data can be loaded into the R environment (after loading the package) by running the following code: 
+
+```{r data load}
+
+# Load the private data
+data("private_data")
+
+# Load the DP data
+data('dp_data')
+```
+
+
+## lmdp()
+
+`lmdp()` is the primary function of the package. It returns estimates of bias corrected coefficients from differentially private data, alongside several other quantities. Users can interact with it in a similar way to `lm()`. There are only two required inputs, the `formula` and  `data`. For instance: 
+\
+```{r main fn}
+lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)
+
+```
+\
+An important distinction between `lmdp()` and `lm()` is that the first row of `data` must indicate the standard deviations of the DP error added to the rest of the data matrix. For instance, if we look at `dp_data`, we see by looking at row $1$ that no noise was added to $Y$, the standard error of noise added to $X1$ was $0.7$, and so on. 
+
+```{r dat}
+head(dp_data)
+```
+\
+An exception to this rule is if the argument `noise` is set to something other than it's default (`= NULL`). If `noise = x` (where `x` is any real number), then `lmdp()` will automatically set the error for every column to `x`. In this situation, the first row of the data matrix will be ignored.
+
+
+\
+The output from `lmdp()`can be summarized using `summary()`, just like a standard `lm` object. 
+
+```{r summary}
+summary(lmdp_test)
+```
+\
+The additional output from `lmdp()` is stored in a list that can be accessed as follows: 
+  
+```{r full output}
+# This summarizes the output of an lmdp object
+str(lmdp_test)
+
+# For instance we can access the variance covariance matrix as follows
+lmdp_test$beta_tilde_vcov
+```
+
+
+## The impact of bias correction 
+
+\
+It is informative to compare `lmdp()` estimates to the estimates produced from `lm()` that do not adjust for the random error in `dp_data`: 
+  
+```{r uncorrected, warning=FALSE}
+
+lm_test <- lm(Y ~ X1 + X2 + X3, data = dp_data)
+
+# Biased  OLS estimates
+round(summary(lm_test)$coef, 4)
+```
+\
+
+```{r lmdp0, warning=FALSE}
+# Notice that if we set noise = 0, lmdp gives the same point estimates as lm()
+# Standard errors differ since we use a different estimate procedure 
+
+lmdp_test_0 <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, noise = 0)
+
+summary(lmdp_test_0)
+
+```
+
+\ 
+
+We can compare the `lmdp()` estimates and `lm()` estimates to the unbiased estimates on private data. 
+
+```{r true}
+lm_true <- lm(Y ~ Z1 + Z2 + Z3, data = private_data)
+
+# We see that the lmdp estimates are very close to the lm estimates on private data
+# In contrast, the lm estimates appear biased 
+round(summary(lm_true)$coef, 4)
+```
+
+
+
+## Variance estimation 
+
+The default setting of `lmdp()` is to estimate the standard errors using the simulation method developed in @dp2. We also offer the option to bootstrap the standard errors by setting the argument `bootstrap_var` to  `TRUE`. In general the two methods will  produce very similar estimates. The advantage of the simulation method is computational. For large datasets, the bootstrap is essentially infeasible without access to large amounts of computing power. In contrast, the computational time of our simulation procedure scales only slowly in dataset size. 
+
+```{r var, warning=FALSE}
+
+# Timing simulation variance estimation
+system.time(simulation <- lmdp(Y ~ X1 + X2 + X3, data = dp_data))
+
+# Timing bootstrap variance estimation 
+system.time(bootstrap <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, bootstrap_var = TRUE))
+
+# Bootstrap takes ~30 times longer than simulation for dataset of size N = 100000
+
+# The standard error estimates are similar between the two methods: 
+
+  # Bootstrap Std. Error
+summary(bootstrap)[, "Std. Error"]
+
+  # Simulation Std. Error
+summary(simulation)[, "Std. Error"]
+```
+
+\
+On small datasets with a relatively large amount of DP error, the variance-covariance matrix 
+we estimate as a paramater to draw random variables may not be positive definite. If this happens, then we use the function `nearPD()` from the package `Matrix`, which finds a close positive definite matrix [@matrix]. `lmdp()` will poduce the warning message `VC matrix not positive definite` to alert users to this. The function also returns an indicator variable which records whether the matrix was positive definite which can be accessed as follows:
+
+```{r pd}
+lmdp_test$vc_pos_def
+```
+\
+
+## Variable transformation
+
+As discussed in @dp2, transforming variables with random error poses additional complications for estimation. `PrivacyUnbiased` can currently accomdate two types of variable transformation: interaction variables, and squared variables. For example: 
+
+
+```{r interaction}
+
+# Interaction variable
+lmdp_interaction <- lmdp(Y ~ X1 + X2 + X3 + X1*X2, data = dp_data)
+summary(lmdp_interaction)
+
+# lmdp with interactions produces similar estimates to lm on private data
+# Standard errors are lower since Z's do not contain random noise 
+lm_interaction <- lm(Y ~ Z1 + Z2 + Z3 + Z1*Z2, data = private_data)
+round(summary(lm_interaction)$coefficients, 4)
+
+```
+\
+Other variable transformations, or multiple variable transformation, are not allowed in this version of the package and their inclusion will induce an error message. Note also that `lmdp()` currently only supports bootstrap estimation when the model includes transformed variables. We are working on expanding the set of admisssible variable transformations and introducing the simulation approach to variance estimation for these models. 
+
+# References
