@@ -24,9 +24,9 @@
 #' \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
 #' @export
 #' @examples
-#' data(dp_data)
- lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)
- summary(lmdp_test)
+#' \dontrun{data(dp_data)}
+#' \dontrun{lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)}
+#' \dontrun{summary(lmdp_test)}
 
 lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = NULL)
   {

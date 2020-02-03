@@ -37,3 +37,8 @@ This function works similarly to \code{\link{lm}}. It takes a formula and data a
 returns an lmdp object containing bias corrected OLS coefficients and standard errors. The output can be summarised
 by inputting it as an argument to \code{\link{summary.lmdp}}.
 }
+\examples{
+\dontrun{data(dp_data)}
+\dontrun{lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)}
+\dontrun{summary(lmdp_test)}
+}
