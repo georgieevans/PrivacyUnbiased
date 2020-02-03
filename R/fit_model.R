@@ -2,7 +2,7 @@
 #'
 #' This function works similarly to \code{\link{lm}}. It takes a formula and data and
 #' returns an lmdp object containing bias corrected OLS coefficients and standard errors. The output can be summarised
-#' by inputting it as an argument to \code{\link{summary.lmdp}}.
+#' by inputting it as an argument to \code{\link{summary.lmdp}}. See an overview at \url{bit.ly/PrivUexample}.
 #'
 #' @param formula An \code{\link{lm}} style formula.
 #' @param data The data to estimate the model on. The first row of data should contain the DP

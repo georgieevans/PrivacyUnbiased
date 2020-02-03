@@ -58,6 +58,12 @@ data('dp_data')
 lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)
 
 ```
+
+You can read the documentation for `lmdp()` by running the code: 
+
+```{r doc, eval = FALSE}
+?lmdp
+```
 \
 An important distinction between `lmdp()` and `lm()` is that the first row of `data` must indicate the standard deviations of the DP error added to the rest of the data matrix. For instance, if we look at `dp_data`, we see by looking at row $1$ that no noise was added to $Y$, the standard error of noise added to $X1$ was $0.7$, and so on. 
 
