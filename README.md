@@ -6,6 +6,7 @@ http://garyking.org/dpd
 
 Install the software by running the following code: 
 
-devtools::install_github("georgieevans/PrivacyUnbiased")
-library(PrivacyUnbiased)
+`devtools::install_github("georgieevans/PrivacyUnbiased")`
+
+`library(PrivacyUnbiased)`
 
