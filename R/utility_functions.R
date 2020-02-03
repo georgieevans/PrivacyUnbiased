@@ -299,6 +299,7 @@ varianceMVN <- function(X, Y, sigma_sq, nsims, coef, S, N, x_prime_x, x_y)
 #' @param int2 Column index of second interaction variable
 #' @param index_sq Column index of second interaction variable
 #' @return Bootstrap samples of b and \eqn{\tilde{\beta}}
+#' @export
 varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index_sq)
   {
   boot_dist <- do.call(rbind, lapply(1:nsims, FUN = function(i){
