@@ -36,7 +36,7 @@ library(PrivacyUnbiased)
 
 ## Example
 
-We demonstrate the capabilities of `PrivacyUnbiased` by simulating the scenario described above. We start with a simulated hypothetical private data set (`private_data`). We then add random error to every cell of the data by drawing errors, $\epsilon_{ik}$, from a mean $0$ normal distribution, $\epsilon_{ik} \sim \mathcal{N}(0, \sigma_k^2)$. We set $\sigma_k$ for each of the $k$ columns of the data.  This produces a differentially private data set (`dp_data`). In practice, the data analyst would not have access to `private_data` and would only be able to observe `dp_data`.
+We demonstrate the capabilities of `PrivacyUnbiased` by simulating the scenario described above. We start with a hypothetical private data set (`private_data`). We then add random error to every cell of the data by drawing errors, $\epsilon_{ik}$, from a mean $0$ normal distribution, $\epsilon_{ik} \sim \mathcal{N}(0, \sigma_k^2)$. We set $\sigma_k$ for each of the $k$ columns of the data.  This produces a differentially private data set (`dp_data`). In practice, the data analyst would not have access to `private_data` and would only be able to observe `dp_data`.
 
 This example data can be loaded into the R environment (after loading the package) by running the following code: 
 
@@ -174,6 +174,6 @@ round(summary(lm_interaction)$coefficients, 4)
 
 ```
 \
-Other variable transformations, or multiple variable transformation, are not allowed in this version of the package and their inclusion will induce an error message. Note also that `lmdp()` currently only supports bootstrap estimation when the model includes transformed variables. We are working on expanding the set of admisssible variable transformations and introducing the simulation approach to variance estimation for these models. 
+Other variable transformations, or multiple variable transformations, are not allowed in this version of the package and their inclusion will induce an error message. Note also that `lmdp()` currently only supports bootstrap estimation when the model includes transformed variables. For future releasse, we are working on expanding the set of admisssible variable transformations and introducing the simulation approach to variance estimation for these cases. 
 
 # References
