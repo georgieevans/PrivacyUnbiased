@@ -11,7 +11,7 @@
 #' If TRUE then the variance covariance matrix is estimated via bootstrap methods. Default is
 #' FALSE unless model contains interaction terms/squared terms or fewer than 10000 obsesrvations
 #' @param nsims_var Number of bootstrap samples/simulations. Default is 500
-#' @param noise Set a default DP standard error for every column of the data
+#' @param noise Set a default differentially private standard error for every column of the data matrix
 #' @return
 #' Returns an object of class lmdp containing:
 #' \item{b}{Inconsistent OLS coefficient estimate}
@@ -22,6 +22,11 @@
 #' \item{Sigma_sq_hat}{Estimate of \eqn{\sigma^2}}
 #' \item{vc_pos_def}{Indicator variable = 1 if covariance estimate was PD. NA if bootstrap used}
 #' \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
+#' @example
+#' data(dp_data)
+#' lmdp_test <- lmdp(Y ~ X1 + X2 + X3, data = dp_data)
+#' summary(lmdp_test)
+#'
 #' @export
 
 lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = NULL)

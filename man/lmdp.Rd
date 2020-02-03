@@ -19,7 +19,7 @@ FALSE unless model contains interaction terms/squared terms or fewer than 10000 
 
 \item{nsims_var}{Number of bootstrap samples/simulations. Default is 500}
 
-\item{noise}{Set a default DP standard error for every column of the data}
+\item{noise}{Set a default differentially private standard error for every column of the data matrix}
 }
 \value{
 Returns an object of class lmdp containing:
