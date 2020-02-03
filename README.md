@@ -10,3 +10,6 @@ Install the software by running the following code:
 
 `library(PrivacyUnbiased)`
 
+Read an overview of the package: 
+
+<https://github.com/georgieevans/PrivacyUnbiased/blob/master/Example/Example.pdf> 
