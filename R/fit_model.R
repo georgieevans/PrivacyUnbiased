@@ -95,6 +95,10 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
     # Estimate sigma^2
     sigma_sq <- sigmaSq(Y = Y, bias_correct = beta_tilde, S = S, X = X)
 
+    if(sigma_sq < 0){
+      warning("Sigma squared estimate negative")
+    }
+
     # Estimate variance
     b_index <- 1:length(b)
     beta_tilde_index <- (length(b) + 1):(2*length(b))
