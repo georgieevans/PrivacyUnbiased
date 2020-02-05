@@ -110,7 +110,9 @@ betaTildeSq <- function(coef, S, X, N, index_sq)
 #' @export
 sigmaSq <- function(Y, bias_correct, S, X)
   {
-  var(Y - as.numeric(bias_correct%*%t(X))) - t(bias_correct^2)%*%diag(S)
+  K <- length(bias_correct) - 1
+  (1/(nrow(X) - K))*t(Y - as.numeric(bias_correct%*%t(X)))%*%(Y - as.numeric(bias_correct%*%t(X))) - t(bias_correct^2)%*%diag(S)
+  #var(Y - as.numeric(bias_correct%*%t(X))) - t(bias_correct^2)%*%diag(S)
   }
 
 #' Estimates \eqn{Cov(X_k'y, X_j'X_m)}
