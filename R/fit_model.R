@@ -22,6 +22,7 @@
 #' \item{Sigma_sq_hat}{Estimate of \eqn{\sigma^2}}
 #' \item{vc_pos_def}{Indicator variable = 1 if covariance estimate was PD. NA if bootstrap used}
 #' \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
+#' \item{est_vc}{Variance-covariance matrix used in variance simulation. NA if bootstrap used}
 #' @export
 #' @examples
 #' \dontrun{data(dp_data)}
