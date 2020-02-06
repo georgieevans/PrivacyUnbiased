@@ -125,8 +125,8 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
 
       # Beta tilde vcov
       beta_tilde_vcov <- cov(var_sims$sims[, beta_tilde_index])
-      var_sims <- var_sims$sims
       est_vc <- var_sims$Sigma
+      var_sims <- var_sims$sims
       boot <- FALSE
 
     }else{
