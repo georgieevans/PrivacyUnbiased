@@ -170,10 +170,12 @@ covXyXy <- function(k, j, S, X, Y, sigma_sq, x_prime_x, N)
 #' @param N Number of rows in X
 #' @return Estimate of \eqn{Cov(X_k'X_j, X_m'X_l)}
 #' @export
+
 covXX <- function(k, j, l, m, S, X, x_prime_x, N)
   {
   omega <- x_prime_x - N*S
-  cov_est <- omega[k,l]*S[j, m] + omega[k, m]*S[j,l] + omega[j, l]*S[k,m] + omega[j, m]*S[k,l]  + 2*N*(S[k,l])*(S[j,m])
+  #cov_est <- omega[k,l]*S[j, m] + omega[k, m]*S[j,l] + omega[j, l]*S[k,m] + omega[j, m]*S[k,l]  + 2*N*(S[k,l])*(S[j,m])
+  cov_est <- omega[k,l]*S[j, m] + omega[k, m]*S[j,l] + omega[j, l]*S[k,m] + omega[j, m]*S[k,l]  + N*((S[k,m])*(S[j,l]) + S[k,l]*S[j,m])
   return(cov_est)
   }
 
