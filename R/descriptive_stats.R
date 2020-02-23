@@ -50,8 +50,8 @@ descriptiveDP <- function(variable, data){
   skew_z <- (m3 - 3*m1*sd_z^2 - m1^3)/(sd_z^3)
   kurt_z <- (-3*m1^4 + 6*m1^2*m2 - 4*m1*m3 + m4)/(sd_z^4)
 
-  Z_df <- data.frame(Mean = m1, Variance = var_z, Skewness = skew_z, Kurtosis = kurt_z)
-  X_df <- data.frame(Mean = mean(X), Variance = var(X), Skewness = moments::skewness(X),
+  Z_df <- data.frame(Mean = m1, `Std Dev` = sqrt(var_z), Skewness = skew_z, Kurtosis = kurt_z)
+  X_df <- data.frame(Mean = mean(X), `Std Dev` = sd(X), Skewness = moments::skewness(X),
                      Kurtosis = moments::kurtosis(X))
   df <- round(rbind(Z_df, X_df), 4)
   rownames(df) <- c('Before DP noise (estimated)', 'After DP noise (observed)')
