@@ -78,17 +78,17 @@ An exception to this rule is if the argument `noise` is set to something other t
 The output from `lmdp()`can be summarized using `summary()`, just like a standard `lm` object. 
 
 ```{r summary}
-summary(lmdp_test)
+  summary(lmdp_test)
 ```
 \
 The additional output from `lmdp()` is stored in a list that can be accessed as follows: 
   
 ```{r full output}
 # This summarizes the output of an lmdp object
-str(lmdp_test)
+  str(lmdp_test)
 
 # For instance we can access the variance covariance matrix as follows
-lmdp_test$beta_tilde_vcov
+  lmdp_test$beta_tilde_vcov
 ```
 
 
@@ -99,10 +99,10 @@ It is informative to compare `lmdp()` estimates to the estimates produced from `
   
 ```{r uncorrected, warning=FALSE}
 
-lm_test <- lm(Y ~ X1 + X2 + X3, data = dp_data)
+  lm_test <- lm(Y ~ X1 + X2 + X3, data = dp_data)
 
 # Biased  OLS estimates
-round(summary(lm_test)$coef, 4)
+  round(summary(lm_test)$coef, 4)
 ```
 \
 
@@ -110,9 +110,9 @@ round(summary(lm_test)$coef, 4)
 # Notice that if we set noise = 0, lmdp gives the same point estimates as lm()
 # Standard errors differ since we use a different estimate procedure 
 
-lmdp_test_0 <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, noise = 0)
+  lmdp_test_0 <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, noise = 0)
 
-summary(lmdp_test_0)
+  summary(lmdp_test_0)
 
 ```
 
@@ -121,11 +121,11 @@ summary(lmdp_test_0)
 We can compare the `lmdp()` estimates and `lm()` estimates to the unbiased estimates on private data. 
 
 ```{r true}
-lm_true <- lm(Y ~ Z1 + Z2 + Z3, data = private_data)
+  lm_true <- lm(Y ~ Z1 + Z2 + Z3, data = private_data)
 
 # We see that the lmdp estimates are very close to the lm estimates on private data
 # In contrast, the lm estimates appear biased 
-round(summary(lm_true)$coef, 4)
+  round(summary(lm_true)$coef, 4)
 ```
 
 
@@ -137,20 +137,20 @@ The default setting of `lmdp()` is to estimate the standard errors using the sim
 ```{r var, warning=FALSE}
 
 # Timing simulation variance estimation
-system.time(simulation <- lmdp(Y ~ X1 + X2 + X3, data = dp_data))
+  system.time(simulation <- lmdp(Y ~ X1 + X2 + X3, data = dp_data))
 
 # Timing bootstrap variance estimation 
-system.time(bootstrap <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, bootstrap_var = TRUE))
+  system.time(bootstrap <- lmdp(Y ~ X1 + X2 + X3, data = dp_data, bootstrap_var = TRUE))
 
 # Bootstrap takes ~30 times longer than simulation for dataset of size N = 100000
 
 # The standard error estimates are similar between the two methods: 
 
   # Bootstrap Std. Error
-summary(bootstrap)[, "Std. Error"]
+  summary(bootstrap)[, "Std. Error"]
 
   # Simulation Std. Error
-summary(simulation)[, "Std. Error"]
+  summary(simulation)[, "Std. Error"]
 ```
 
 \
@@ -181,5 +181,26 @@ round(summary(lm_interaction)$coefficients, 4)
 ```
 \
 Other variable transformations, or multiple variable transformations, are not allowed in this version of the package and their inclusion will induce an error message. Note also that `lmdp()` currently only supports bootstrap estimation when the model includes transformed variables. For future releasse, we are working on expanding the set of admisssible variable transformations and introducing the simulation approach to variance estimation for these cases. 
+
+
+## Descriptive statistics
+
+`PrivacyUnbiased` also includes a function to calculate estimates of descriptive statistics of the \textit{private data}, using the moment estimation methods described in @dp2. The primary function for descriptive statistics is `descriptiveDP()`, which takes two arguments, the variable name and the data frame. 
+
+```{r descriptive}
+
+# Estimate Descriptive statistics 
+  descriptiveDP(X3, dp_data)
+
+# We can compare these estimates to the true values from private_data:
+  true_descriptive <- round(c(mean(private_data$Z3),
+          sd(private_data$Z3),  
+          moments::skewness(private_data$Z3),
+          moments::kurtosis(private_data$Z3)), 4)
+  
+  names(true_descriptive) <- c('Mean', 'Std.Dev', 'Skewness', 'Kurtosis')
+  
+  true_descriptive
+```
 
 # References
