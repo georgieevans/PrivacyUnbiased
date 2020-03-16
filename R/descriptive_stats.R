@@ -54,6 +54,24 @@ Rmoments <- function(X, S, R, n){
 }
 
 
+#' Estimate the Scaled Moments
+#'
+#' This function estimates mean, variance, skew and kurtosis of the private data
+#' @param moments Vector of estimated raw moments
+#' @return Vector of scaled moments
+#' @export
+scaledMoments <- function(moments){
+  m1 <- moments[1]
+  m2 <- moments[2]
+  m3 <- moments[3]
+  m4 <- moments[4]
+  var_z <- -m1^2 + m2
+  sd_z <- sqrt(var_z)
+  skew_z <- (m3 - 3*m1*sd_z^2 - m1^3)/(sd_z^3)
+  kurt_z <- (-3*m1^4 + 6*m1^2*m2 - 4*m1*m3 + m4)/(sd_z^4)
+  return(c(m1, var_z, skew_z, kurt_z))
+}
+
 #' Estimate the first R raw moments
 #'
 #' This function estimates descriptive statistics of private data from column in DP data
