@@ -23,6 +23,9 @@
 #' \item{vc_pos_def}{Indicator variable = 1 if covariance estimate was PD. NA if bootstrap used}
 #' \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
 #' \item{est_vc}{Variance-covariance matrix used in variance simulation. NA if bootstrap used}
+#' \item{X}{Matrix of covariates}
+#' \item{Y}{Dependent variable vector}
+#' \item{formula}{Model formula}
 #' @export
 #' @examples
 #' \dontrun{data(dp_data)}
@@ -213,7 +216,10 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
     Sigma_sq_hat = sigma_sq,
     vc_pos_def = vc_pos_def,
     boot = boot,
-    est_vc = est_vc
+    est_vc = est_vc,
+    Y = c(model.frame(reg)[1, 1], Y),
+    X = rbind(c(0, S_vec[match(colnames(X)[-1], colnames(data))]), X),
+    formula = formula
   )
 
   class(output) <- "lmdp"
