@@ -29,7 +29,7 @@ diagnosticsDP <- function(lmdp_obj)
   normality <- as.data.frame(cbind(`Est. error` = scaledMoments(e_moments[, 1])[3:4], `Normal dist.`= c(0, 3)))
   rownames(normality) <- c('Skewness', 'Kurtosis')
 
-  cat("\n Heteroskedsaticity test via Variance Regression (Bias Corrected Residuals):\n\n")
+  cat("\n Heteroskedsaticity test via Variance Function Regression:\n\n")
   print.default(summary(het_reg),
                 print.gap = 2L, quote = FALSE)
   cat("\n Error Normality Test:\n\n")

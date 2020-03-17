@@ -8,6 +8,7 @@ bibliography: documentation.bib
   
 ```{r setup, echo = FALSE}
 suppressMessages(library(PrivacyUnbiased))
+suppressMessages(library(ggplot2))
 ```
 
 
@@ -220,7 +221,7 @@ data('dp_data2')
 The function `distributionDP()` estimates private histograms from the differentialy private data. There are three required arguments. `variable` should be the name of the column in the data, `data` is that data name, and `distsributions` is a vector of distributions to paramaterize. 
 
 
-```{r}
+```{r, fig.height=3, fig.width = 4}
 set.seed(02138)
 
 dist_test <- distributionDP(variable = X1, data = dp_data2, distributions = c('Normal', 'Poisson', 'ZIP', 'NB', 'ZINB'), moments_fit = 6, plot = TRUE, plot_dp = TRUE)
@@ -234,7 +235,7 @@ dist_test$Normal$moment_precision
 dist_test$ZINB$plot
 ```
 
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, warning = FALSE, fig.height=3, fig.width = 4}
  ggplot2::ggplot(private_data2) +
       ggplot2::geom_histogram(ggplot2::aes(x = Z1), alpha = .7, bins = 50, fill = 'navyblue')  +
       ggplot2::theme_bw() +
@@ -243,7 +244,7 @@ dist_test$ZINB$plot
             panel.grid.major = ggplot2::element_blank(),
             panel.grid.minor = ggplot2::element_blank()) +
       ggplot2::labs(x = '', title = 'Private data') +
-      ggplot2::scale_fill_manual(values = c('navyblue')) + xlim(c(-5, 20))
+      ggplot2::scale_fill_manual(values = c('navyblue')) + ggplot2::xlim(c(-5, 20))
 ```
 
 
@@ -251,7 +252,7 @@ dist_test$ZINB$plot
 
 The function `diagnosticsDP()` runs regression diagnostics of the kind that would be run after running OLS on private data. It takes a single argument which must be an `lmdp()` object. 
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, fig.height=3, fig.width = 4}
 
 # First we run a bias corrected regression
 lmdp_obj <- lmdp(Y ~ X1, data = dp_data2)

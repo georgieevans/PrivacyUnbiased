@@ -1,7 +1,6 @@
 #' Simulate data
 #'
-#' This function simulatess example data.
-#' @param coef Vector of OLS coefficients
+#' This function simulates example data.
 #' @param N Number of observations in simulated data
 #' @return
 #' Returns a list:
@@ -46,3 +45,42 @@ genData <- function(N)
 
   }
 
+#' Simulate data 2
+#'
+#' This function simulates example data with heteroskedastic error and zero inflated covariates.
+#' @param N Number of observations in simulated data
+#' @return
+#' Returns a list:
+#' \item{original_data}{Data before DP noise added}
+#' \item{data_errror}{Data after DP noise added }
+#' @export
+genData2 <- function(N)
+{
+
+  pi0 <- 0.4
+  p <- 0.2
+  r <- 20
+  n <- N
+
+  ind <- sample(c(0, 1), n, prob = c(pi0, 1 - pi0), replace = TRUE)
+  Z1 <- ind*rnbinom(n, mu = p*r/(1-p), size = r)
+  s1 <- 0.3*sd(Z1)
+  X1 <- Z1 + rnorm(n, 0, sd = s1)
+
+
+  b0 <- 2
+  b1 <- 8
+
+
+  Y_res <- sapply(1:length(Z1), FUN = function(i) rnorm(1, mean = 0, sd = sqrt(10 + 2*Z1[i])))
+  Y <- b0 + b1*Z1 + Y_res
+
+  original_data <- data.frame(Y = Y, Z1 = Z1)
+
+  data_error <- data.frame(Y = Y, X1 = X1)
+  err_vec <- data.frame(Y = 0, X1 = s1)
+  data_error <- as.data.frame(rbind(err_vec, data_error))
+
+  return(list(private_data = original_data, dp_data = data_error))
+
+}
