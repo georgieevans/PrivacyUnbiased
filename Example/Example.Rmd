@@ -278,9 +278,9 @@ true_errors <- private_data2$Y - cbind(1, private_data2$Z1)%*%true_coef
 
 # Validate they are ~ normally distributed 
 
-# Skewness should be 0
+# Skewness of a normal is  0
 moments::skewness(true_errors)
-# Kurtosis should be 3
+# Kurtosis of a normal is 3
 moments::kurtosis(true_errors)
 
 # Test for heteroskedasticity (we obtain similar coefficients to above showing heteroskedasticity) 
