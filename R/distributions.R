@@ -9,8 +9,8 @@
 plotDist <- function(X, Z_est, plot_dp){
   if(plot_dp == TRUE){
     plot <- ggplot2::ggplot() +
-      ggplot2::geom_histogram(ggplot2::aes(x = X, fill = 'X'), alpha = .7, bins = length(X)/2000)  +
-      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = length(X)/2000) +
+      ggplot2::geom_histogram(ggplot2::aes(x = X, fill = 'X'), alpha = .7, bins = length(X)/1500)  +
+      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = length(X)/1500) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = c(0.9, 0.9),
             legend.justification =  c(0.9, 0.9),
@@ -232,7 +232,7 @@ paramsZINB <- function(X, S, R, moments_df, plot_dp){
 #'
 #'  Paramaterize distributions for private data based on moments estimated from DP data
 #' @param variable Variable name in dataa
-#' @param data DP data (first row should contain sd of noise added to `variable``)
+#' @param data DP data (first row should contain sd of noise added to `variable`)
 #' @param distributions Vector of distributions to fit. Options include 'Normal', 'Poisson', 'NB', 'ZIP', 'ZINB'
 #' @param moments_fit Number of moments to fit implied distribution to
 #' @param Plot Plot histogram of distributions TRUE/FALSE
@@ -247,7 +247,7 @@ distributionDP <- function(variable, data, distributions, moments_fit = 6, plot 
   S <- var[1]
   X <- var[-1]
   n <- length(X)
-  moments_df <- Rmoments(X, S, R, n = n)
+  moments_df <- Rmoments(X, S, moments_fit, n = n)
   moments <- moments_df[,1]
 
   output_list <- list()

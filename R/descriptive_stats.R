@@ -83,7 +83,7 @@ descriptiveDP <- function(variable, data){
   var <- eval(substitute(variable),data, parent.frame())
   S <- var[1]
   X <- var[-1]
-  moments <- Rmoments(X, S, 4)[, 1]
+  moments <- Rmoments(X, S, 4, n = length(X))[, 1]
   m1 <- moments[1]
   m2 <- moments[2]
   m3 <- moments[3]

@@ -203,4 +203,81 @@ Other variable transformations, or multiple variable transformations, are not al
   true_descriptive
 ```
 
+We will look at simulated heteroskedastic data with zero-inflated covariates to demonstrate methods described in @dp2 for data of this nature. The simualted data can be loaded as follows. 
+
+```{r}
+# Load the private data
+data('private_data2')
+
+# Load the differntially private data
+data('dp_data2')
+```
+
+
+## Estimating private histograms
+
+
+The function `distributionDP()` estimates private histograms from the differentialy private data. There are three required arguments. `variable` should be the name of the column in the data, `data` is that data name, and `distsributions` is a vector of distributions to paramaterize. 
+
+
+```{r}
+set.seed(02138)
+
+dist_test <- distributionDP(variable = X1, data = dp_data2, distributions = c('Normal', 'Poisson', 'ZIP', 'NB', 'ZINB'), moments_fit = 6, plot = TRUE, plot_dp = TRUE)
+
+# Check that moments were estimated with sufficient precision
+dist_test$Normal$moment_precision
+
+# So it looks like ZINB fits the data well.
+# Here we can check this is right by comparing the paramaterized distribution to the private data
+# Normally we would not have access to the private data and would rely on the moment fit
+dist_test$ZINB$plot
+```
+
+```{r, echo = FALSE, warning = FALSE}
+ ggplot2::ggplot(private_data2) +
+      ggplot2::geom_histogram(ggplot2::aes(x = Z1), alpha = .7, bins = 50, fill = 'navyblue')  +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position = c(0.9, 0.9),
+            legend.justification =  c(0.9, 0.9),
+            panel.grid.major = ggplot2::element_blank(),
+            panel.grid.minor = ggplot2::element_blank()) +
+      ggplot2::labs(x = '', title = 'Private data') +
+      ggplot2::scale_fill_manual(values = c('navyblue')) + xlim(c(-5, 20))
+```
+
+
+## Regression diagnostics
+
+The function `diagnosticsDP()` runs regression diagnostics of the kind that would be run after running OLS on private data. It takes a single argument which must be an `lmdp()` object. 
+
+```{r, warning = FALSE}
+
+# First we run a bias corrected regression
+lmdp_obj <- lmdp(Y ~ X1, data = dp_data2)
+
+# Now we can run regression diagnostics 
+diagnostics <- diagnosticsDP(lmdp_obj)
+
+# We see that there is no evidence of non-normality (which is right, true errors were drawn from normal)
+# We also detect heteroskedasticity since coefficient on X1 is positive
+
+# To validate, here can check this against the private data 
+
+# Calculate the true errors 
+true_coef <- c(2, 8)
+true_errors <- private_data2$Y - cbind(1, private_data2$Z1)%*%true_coef
+
+# Validate they are ormally distributed 
+ggplot() + geom_density(aes(x = true_errors)) + theme_bw() + labs(x = 'true errors')
+
+# Test for heteroskedasticity (we obtain similar coefficients, showing heteroskedasticity) 
+
+summary(lm(true_errors^2 ~ private_data2$Z1))$coefficients
+
+
+
+```
+
+
 # References

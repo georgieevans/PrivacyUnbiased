@@ -16,6 +16,7 @@ diagnosticsDP <- function(lmdp_obj)
   e_hat <- (dp_res)^2 - as.numeric(t(beta_tilde)%*%S%*%beta_tilde) - S_y^2
   err_vec <- c(0, lmdp_obj$X[1, -1])
   dat <- as.data.frame(rbind(err_vec, cbind(e_hat = e_hat, X[, -1])))
+  colnames(dat)[-1] <- colnames(X)[-1]
   names(dat)[1] <- 'e_hat'
   formula <- as.formula(paste0('e_hat ~ ', strsplit(as.character(lmdp_obj$formula), '~')[[3]]))
 
@@ -32,8 +33,9 @@ diagnosticsDP <- function(lmdp_obj)
   print.default(summary(het_reg),
                 print.gap = 2L, quote = FALSE)
   cat("\n Error Normality Test:\n\n")
-  if(sum(e_moments[3:4, 1]/e_moments[3:4, 2] < 2) > 0){
+  if(sum(e_moments[3:4, 1]/e_moments[3:4, 2] < 0.5) > 0){
     cat(' Warning: Error moment estimates are imprecise - unable to accurately test normality of errors')
+    print(normality)
   }else{
     print(normality)
   }
