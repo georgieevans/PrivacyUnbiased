@@ -9,8 +9,8 @@
 plotDist <- function(X, Z_est, plot_dp){
   if(plot_dp == TRUE){
     plot <- ggplot2::ggplot() +
-      ggplot2::geom_histogram(ggplot2::aes(x = X, fill = 'X'), alpha = .7, bins = 35)  +
-      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = 40) +
+      ggplot2::geom_histogram(ggplot2::aes(x = X, fill = 'X'), alpha = .7, bins = length(X)/2000)  +
+      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = length(X)/2000) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = c(0.9, 0.9),
             legend.justification =  c(0.9, 0.9),
@@ -20,7 +20,7 @@ plotDist <- function(X, Z_est, plot_dp){
       ggplot2::scale_fill_manual(values = c('navyblue', 'orange'))
   }else{
     plot <- ggplot2::ggplot() +
-      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = 40) +
+      ggplot2::geom_histogram(ggplot2::aes(x = Z_est, fill = 'Est Z'), alpha = .7, bins = length(X)/2000) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = c(0.9, 0.9),
                      legend.justification =  c(0.9, 0.9),
@@ -213,7 +213,7 @@ paramsZINB <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[,1]
   est <- as.numeric(estZNB(moments))
   if(est[2] < 0| est[2] > 1| est[1] < 0| est[1] > 1){
-    warning('Estimates outside logical bounds')
+    warning('ZINB estimates outside logical bounds')
     return(list(params = est))
   }
   ind <- sample(c(0, 1), 2*n, prob = c(est[1], 1 - est[1]), replace = TRUE)
@@ -297,7 +297,7 @@ distributionDP <- function(variable, data, distributions, moments_fit = 6, plot 
   rownames(fit_table) <- sapply(1:length(output_list), FUN = function(i) output_list[[i]]$dist)
   colnames(fit_table) <- paste0('mu', c(1:moments_fit))
 
-  cat("\n Heteroskedsaticity test via Variance Regression (Bias Corrected Residuals):\n\n")
+  cat("\n Estimated Raw Moments/Implied Distribution Moments:\n\n")
   print(fit_table)
 
   output <- list(
