@@ -205,6 +205,7 @@ Other variable transformations, or multiple variable transformations, are not al
 ```
 
 We will look at simulated heteroskedastic data with zero-inflated covariates to demonstrate methods described in @dp2 for data of this nature. The simualted data can be loaded as follows. 
+\
 
 ```{r}
 # Load the private data
@@ -214,26 +215,29 @@ data('private_data2')
 data('dp_data2')
 ```
 
+\
 
 ## Estimating private histograms
 
 
-The function `distributionDP()` estimates private histograms from the differentialy private data. There are three required arguments. `variable` should be the name of the column in the data, `data` is that data name, and `distsributions` is a vector of distributions to paramaterize. 
+The function `distributionDP()` estimates private histograms from the differentialy private data. It takes three required arguments: `variable` should be the name of the column in the data, `data` is the DP data frame, and `distsributions` is a vector of distributions to paramaterize. The remaining arguments are set as defaults but can be altered by the user. 
+\
 
 
 ```{r, fig.height=3, fig.width = 4}
-set.seed(02138)
-
-dist_test <- distributionDP(variable = X1, data = dp_data2, distributions = c('Normal', 'Poisson', 'ZIP', 'NB', 'ZINB'), moments_fit = 6, plot = TRUE, plot_dp = TRUE)
+dist_test <- distributionDP(variable = X1, data = dp_data2, 
+                            distributions = c('Normal', 'Poisson', 'ZIP', 'NB', 'ZINB'),
+                            moments_fit = 6, plot = TRUE, plot_dp = TRUE)
 
 # Check that moments were estimated with sufficient precision
 dist_test$Normal$moment_precision
 
 # So it looks like ZINB fits the data well
-# Here we can check this is right by comparing the paramaterized distribution to the private data
+# Here we can check this is right by comparing paramaterized distribution to private data
 # Normally we would not have access to the private data and would rely on the moment fit
 dist_test$ZINB$plot
 ```
+\
 
 ```{r, echo = FALSE, warning = FALSE, fig.height=3, fig.width = 4}
  ggplot2::ggplot(private_data2) +
@@ -246,11 +250,14 @@ dist_test$ZINB$plot
       ggplot2::labs(x = '', title = 'Private data') +
       ggplot2::scale_fill_manual(values = c('navyblue')) + ggplot2::xlim(c(-5, 20))
 ```
+\
 
 
 ## Regression diagnostics
 
+
 The function `diagnosticsDP()` runs regression diagnostics of the kind that would be run after running OLS on private data. It takes a single argument which must be an `lmdp()` object. 
+\
 
 ```{r, warning = FALSE, fig.height=3, fig.width = 4}
 
@@ -260,25 +267,29 @@ lmdp_obj <- lmdp(Y ~ X1, data = dp_data2)
 # Now we can run regression diagnostics 
 diagnostics <- diagnosticsDP(lmdp_obj)
 
-# We see that there is no evidence of non-normality (which is right, true errors were drawn from normal)
-# We also detect heteroskedasticity since coefficient on X1 is positive
+# We see that there is no strong evidence of non-normality 
+# We also detect heteroskedasticity since X1 coefficient deviates significantly from 0
 
-# To validate, here can check this against the private data 
+# To validate, we can check these results against the private data 
 
 # Calculate the true errors 
 true_coef <- c(2, 8)
 true_errors <- private_data2$Y - cbind(1, private_data2$Z1)%*%true_coef
 
-# Validate they are ormally distributed 
-ggplot() + geom_density(aes(x = true_errors)) + theme_bw() + labs(x = 'true errors')
+# Validate they are ~ normally distributed 
 
-# Test for heteroskedasticity (we obtain similar coefficients, showing heteroskedasticity) 
+# Skewness should be 0
+moments::skewness(true_errors)
+# Kurtosis should be 3
+moments::kurtosis(true_errors)
 
+# Test for heteroskedasticity (we obtain similar coefficients to above showing heteroskedasticity) 
 summary(lm(true_errors^2 ~ private_data2$Z1))$coefficients
 
 
 
 ```
+\
 
 
 # References
