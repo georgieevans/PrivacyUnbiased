@@ -228,7 +228,7 @@ dist_test <- distributionDP(variable = X1, data = dp_data2, distributions = c('N
 # Check that moments were estimated with sufficient precision
 dist_test$Normal$moment_precision
 
-# So it looks like ZINB fits the data well.
+# So it looks like ZINB fits the data well
 # Here we can check this is right by comparing the paramaterized distribution to the private data
 # Normally we would not have access to the private data and would rely on the moment fit
 dist_test$ZINB$plot

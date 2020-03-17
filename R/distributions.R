@@ -51,6 +51,7 @@ plotDist <- function(X, Z_est, plot_dp){
 #' @export
 #'
 paramsNormal <- function(X, S, R, moments_df, plot_dp){
+  n <- length(X)
   moments <- moments_df[, 1]
   mu <- mean(X)
   var <- var(X) - S^2
@@ -81,6 +82,7 @@ paramsNormal <- function(X, S, R, moments_df, plot_dp){
 #' @export
 #'
 paramsPoisson <- function(X, S, R, moments_df, plot_dp){
+  n <- length(X)
   moments <- moments_df[, 1]
   lambda <- mean(X)
   Z_est <- rpois(n, lambda)
@@ -112,6 +114,7 @@ paramsPoisson <- function(X, S, R, moments_df, plot_dp){
 #' @export
 #'
 paramsNB <- function(X, S, R, moments_df, plot_dp){
+  n <- length(X)
   moments <- moments_df[, 1]
   var <- var(X) - S^2
   p <- 1 - (mean(X)/var)
@@ -157,6 +160,7 @@ estZIP <- function(moments){
 #' @export
 #'
 paramsZIP <- function(X, S, R, moments_df, plot_dp){
+  n <- length(X)
   moments <- moments_df[,1]
   est <- as.numeric(estZIP(moments))
   if(est[1] < 0| est[1] > 1){
@@ -210,6 +214,7 @@ estZNB <- function(moments){
 #' @export
 #'
 paramsZINB <- function(X, S, R, moments_df, plot_dp){
+  n <- length(X)
   moments <- moments_df[,1]
   est <- as.numeric(estZNB(moments))
   if(est[2] < 0| est[2] > 1| est[1] < 0| est[1] > 1){
