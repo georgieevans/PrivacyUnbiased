@@ -1,3 +1,11 @@
+#' Distribution plots
+#'
+#'
+#' @param X dp vector
+#' @param Z_est Estimate of private vector
+#' @return Histogram of dp vector and estimated private vector
+#' @export
+#'
 plotDist <- function(X, Z_est, plot_dp){
   if(plot_dp == TRUE){
     plot <- ggplot2::ggplot() +
@@ -25,6 +33,23 @@ plotDist <- function(X, Z_est, plot_dp){
 
 }
 
+#' Normal fit
+#'
+#'  Estimate via method of moments fit and paramaters of a normal distribution from DP data
+#' @param X dp vector
+#' @param S dp noise added to obtain X
+#' @param R numbers of implied moments to fit
+#' @param moments_df estimated moments of Z
+#' @param plot_dp TRUE/FALSE value denoting whether to generate plot
+#' @return
+#' Returns list of estimates:
+#' \item{params}{Method of moment estimates of mean and variance of normal distribution}
+#' \item{moment_df}{Moments used to estimate params}
+#' \item{moment_fit}{Ratio of estimated moments to implied moments from paramaterized distribution}
+#' \item{moment_precision}{Ratio of moment mean to moment standard error}
+#' \item{plot}{Plot of fitted distribution}
+#' @export
+#'
 paramsNormal <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[, 1]
   mu <- mean(X)
@@ -38,7 +63,23 @@ paramsNormal <- function(X, S, R, moments_df, plot_dp){
               plot = plotDist(X, Z_est, plot_dp)))
 }
 
-
+#' Poisson fit
+#'
+#'  Estimate via method of moments fit and paramaters of a Poisson distribution from DP data
+#' @param X dp vector
+#' @param S dp noise added to obtain X
+#' @param R numbers of implied moments to fit
+#' @param moments_df estimated moments of Z
+#' @param plot_dp TRUE/FALSE value denoting whether to generate plot
+#' @return
+#' Returns list of estimates:
+#' \item{params}{Method of moment estimate of mean/variance of lambda distribution}
+#' \item{moment_df}{Moments used to estimate params}
+#' \item{moment_fit}{Ratio of estimated moments to implied moments from paramaterized distribution}
+#' \item{moment_precision}{Ratio of moment mean to moment standard error}
+#' \item{plot}{Plot of fitted distribution}
+#' @export
+#'
 paramsPoisson <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[, 1]
   lambda <- mean(X)
@@ -53,6 +94,23 @@ paramsPoisson <- function(X, S, R, moments_df, plot_dp){
 
 }
 
+#' NegBin fit
+#'
+#'  Estimate via method of moments fit and paramaters of a negative binomial distribution from DP data
+#' @param X dp vector
+#' @param S dp noise added to obtain X
+#' @param R numbers of implied moments to fit
+#' @param moments_df estimated moments of Z
+#' @param plot_dp TRUE/FALSE value denoting whether to generate plot
+#' @return
+#' Returns list of estimates:
+#' \item{params}{Method of moment estimate of paramaters of a NB distribution}
+#' \item{moment_df}{Moments used to estimate params}
+#' \item{moment_fit}{Ratio of estimated moments to implied moments from paramaterized distribution}
+#' \item{moment_precision}{Ratio of moment mean to moment standard error}
+#' \item{plot}{Plot of fitted distribution}
+#' @export
+#'
 paramsNB <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[, 1]
   var <- var(X) - S^2
@@ -68,13 +126,36 @@ paramsNB <- function(X, S, R, moments_df, plot_dp){
 
 }
 
+#' Zero Inflated Poisson paramaters
+#'
+#' Estimates paramaters of a ZIP using moments
+#' @param moments vector of moments
+#' @return Vector of ZIP paramaters
+#' @export
+#'
 estZIP <- function(moments){
   pi <- 1 - moments[2]/moments[1]
   lambda <- (moments[2] - moments[1])/moments[1]
   return(c(pi = pi, lambda = lambda))
 }
 
-
+#' Zero-Inflated Poisson fit
+#'
+#'  Estimate via method of moments fit and paramaters of a ZIP distribution from DP data
+#' @param X dp vector
+#' @param S dp noise added to obtain X
+#' @param R numbers of implied moments to fit
+#' @param moments_df estimated moments of Z
+#' @param plot_dp TRUE/FALSE value denoting whether to generate plot
+#' @return
+#' Returns list of estimates:
+#' \item{params}{Method of moment estimate of mean/variance of ZIP distribution}
+#' \item{moment_df}{Moments used to estimate params}
+#' \item{moment_fit}{Ratio of estimated moments to implied moments from paramaterized distribution}
+#' \item{moment_precision}{Ratio of moment mean to moment standard error}
+#' \item{plot}{Plot of fitted distribution}
+#' @export
+#'
 paramsZIP <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[,1]
   est <- as.numeric(estZIP(moments))
@@ -94,28 +175,40 @@ paramsZIP <- function(X, S, R, moments_df, plot_dp){
 }
 
 
-piZNB <- function(moments){
-  (moments[1]^2*moments[2] + moments[1]*(moments[2] + moments[3]) -
-     2*moments[2]^2 - moments[1]^3)/(moments[1]*(moments[2] + moments[3]) - 2*moments[2]^2)
-}
-
-pZNB <- function(moments){
-  (moments[1]*(moments[2] - moments[3]) + moments[2]^2 - moments[1]^2)/
-    (moments[2]^2 - moments[1]*moments[3])
-}
-
-rZNB <- function(moments){
-  (2*moments[2]^2 - moments[1]*(moments[2] + moments[3]))/
-    (moments[1]^2 + moments[1]*(moments[3] - moments[2]) - moments[2]^2)
-}
-
+#' Zero-Inflated NegBin paramaters
+#'
+#' Estimates paramaters of a ZINB using estimated moments
+#' @param moments vector of moments
+#' @return Vector of ZNB paramaters
+#' @export
+#'
 estZNB <- function(moments){
-  pi <- piZNB(moments)
-  p <- pZNB(moments)
-  r <- rZNB(moments)
+  pi <-  (moments[1]^2*moments[2] + moments[1]*(moments[2] + moments[3]) -
+            2*moments[2]^2 - moments[1]^3)/(moments[1]*(moments[2] + moments[3]) - 2*moments[2]^2)
+  p <- (moments[1]*(moments[2] - moments[3]) + moments[2]^2 - moments[1]^2)/
+    (moments[2]^2 - moments[1]*moments[3])
+  r <- (2*moments[2]^2 - moments[1]*(moments[2] + moments[3]))/
+    (moments[1]^2 + moments[1]*(moments[3] - moments[2]) - moments[2]^2)
   return(c(pi = pi, p = p, r = r))
 }
 
+#' Zero-Inflated NegBin fit
+#'
+#'  Estimate via method of moments fit and paramaters of a ZINB distribution from DP data
+#' @param X dp vector
+#' @param S dp noise added to obtain X
+#' @param R numbers of implied moments to fit
+#' @param moments_df estimated moments of Z
+#' @param plot_dp TRUE/FALSE value denoting whether to generate plot
+#' @return
+#' Returns list of estimates:
+#' \item{params}{Method of moment estimate of mean/variance of ZINB distribution}
+#' \item{moment_df}{Moments used to estimate params}
+#' \item{moment_fit}{Ratio of estimated moments to implied moments from paramaterized distribution}
+#' \item{moment_precision}{Ratio of moment mean to moment standard error}
+#' \item{plot}{Plot of fitted distribution}
+#' @export
+#'
 paramsZINB <- function(X, S, R, moments_df, plot_dp){
   moments <- moments_df[,1]
   est <- as.numeric(estZNB(moments))
@@ -135,6 +228,19 @@ paramsZINB <- function(X, S, R, moments_df, plot_dp){
 }
 
 
+#' Paramaterize distrributions
+#'
+#'  Paramaterize distributions for private data based on moments estimated from DP data
+#' @param variable Variable name in dataa
+#' @param data DP data (first row should contain sd of noise added to `variable``)
+#' @param distributions Vector of distributions to fit. Options include 'Normal', 'Poisson', 'NB', 'ZIP', 'ZINB'
+#' @param moments_fit Number of moments to fit implied distribution to
+#' @param Plot Plot histogram of distributions TRUE/FALSE
+#' @param plot_dp Include DP in plot
+#' @return
+#' Returns list of paramater estimates:
+#' @export
+#'
 distributionDP <- function(variable, data, distributions, moments_fit = 6, plot = TRUE, plot_dp = TRUE){
 
   var <- eval(substitute(variable),data, parent.frame())
@@ -144,25 +250,63 @@ distributionDP <- function(variable, data, distributions, moments_fit = 6, plot 
   moments_df <- Rmoments(X, S, R, n = n)
   moments <- moments_df[,1]
 
+  output_list <- list()
+  params_normal <- NULL
+  params_poisson <- NULL
+  params_ZIP <- NULL
+  params_NB <- NULL
+  params_ZINB <- NULL
+
   if(!is.na(match('Normal', distributions))){
-    params_normal <- paramsNormal(X = X, S = S, R = moments_fit, plot_dp = plot_dp)
+    params_normal <- paramsNormal(X = X, S = S, R = moments_fit, moments_df = moments_df, plot_dp = plot_dp)
+    if(!is.null(params_normal$moment_fit)){
+      output_list[[length(output_list) + 1]] <- list(dist = 'Normal', fit = params_normal$moment_fit)
+    }
   }
 
   if(!is.na(match('Poisson', distributions))){
-    params_poisson <- paramsPoisson(X = X, S = S, R = moments_fit, plot_dp = plot_dp)
+    params_poisson <- paramsPoisson(X = X, S = S, R = moments_fit, moments_df = moments_df, plot_dp = plot_dp)
+    if(!is.null(params_poisson$moment_fit)){
+      output_list[[length(output_list) + 1]] <- list(dist = 'Poisson', fit = params_poisson$moment_fit)
+    }
   }
 
   if(!is.na(match('ZIP', distributions))){
-    params_ZIP <- paramsZIP(X = X, S = S, R = moments_fit, plot_dp = plot_dp)
+    params_ZIP <- paramsZIP(X = X, S = S, R = moments_fit, moments_df = moments_df, plot_dp = plot_dp)
+    if(!is.null(params_ZIP$moment_fit)){
+      output_list[[length(output_list) + 1]] <- list(dist = 'ZIP', fit = params_ZIP$moment_fit)
+    }
   }
 
 
   if(!is.na(match('NB', distributions))){
-    params_NB <- paramsNB(X = X, S = S, R = moments_fit, plot_dp = plot_dp)
+    params_NB <- paramsNB(X = X, S = S, R = moments_fit, moments_df = moments_df, plot_dp = plot_dp)
+    if(!is.null(params_NB$moment_fit)){
+     output_list[[length(output_list) + 1]] <- list(dist = 'NB', fit = params_NB$moment_fit)
+    }
   }
 
-  if(!is.na(match('ZNB', distributions))){
-    params_ZINB <- paramsZINB(X = X, S = S, R = moments_fit, plot_dp = plot_dp)
+  if(!is.na(match('ZINB', distributions))){
+    params_ZINB <- paramsZINB(X = X, S = S, R = moments_fit, moments_df = moments_df, plot_dp = plot_dp)
+    if(!is.null(params_ZINB$moment_fit)){
+      output_list[[length(output_list) + 1]] <- list(dist = 'ZINB', fit = params_ZINB$moment_fit)
+    }
   }
 
+  fit_table <- as.data.frame(do.call(rbind, lapply(1:length(output_list), FUN = function(i) output_list[[i]]$fit)))
+  rownames(fit_table) <- sapply(1:length(output_list), FUN = function(i) output_list[[i]]$dist)
+  colnames(fit_table) <- paste0('mu', c(1:moments_fit))
+
+  cat("\n Heteroskedsaticity test via Variance Regression (Bias Corrected Residuals):\n\n")
+  print(fit_table)
+
+  output <- list(
+    Normal = params_normal,
+    Poisson = params_poisson,
+    ZIP = params_ZIP,
+    NB = params_NB,
+    ZINB = params_ZINB
+  )
+
+  return(invisible(output))
 }
