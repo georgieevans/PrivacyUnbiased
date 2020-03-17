@@ -33,8 +33,7 @@ diagnosticsDP <- function(lmdp_obj)
                 print.gap = 2L, quote = FALSE)
   cat("\n Error Normality Test:\n\n")
   if(sum(e_moments[3:4, 1]/e_moments[3:4, 2] < 2) > 0){
-    cat('Cannot accurately test normality of errors -
-        moment estimates are too imprecise (due to DP error outweighing signal)')
+    cat(' Warning: Error moment estimates are imprecise - unable to accurately test normality of errors')
   }else{
     print(normality)
   }
@@ -45,3 +44,7 @@ diagnosticsDP <- function(lmdp_obj)
   return(invisible(output))
 
 }
+
+
+
+

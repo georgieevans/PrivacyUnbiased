@@ -217,8 +217,9 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
     vc_pos_def = vc_pos_def,
     boot = boot,
     est_vc = est_vc,
-    Y = c(model.frame(reg)[1, 1], Y),
+    Y = c(S_vec[match(colnames(model.frame(reg))[1], colnames(data))], Y),
     X = rbind(c(0, S_vec[match(colnames(X)[-1], colnames(data))]), X),
+    S = S,
     formula = formula
   )
 
@@ -226,7 +227,6 @@ lmdp <- function(formula, data, bootstrap_var = FALSE, nsims_var = 500, noise = 
 
   return(invisible(output))
   }
-
 
 
 #' Summary lmdp

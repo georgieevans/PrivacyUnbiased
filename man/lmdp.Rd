@@ -32,6 +32,9 @@ Returns an object of class lmdp containing:
 \item{vc_pos_def}{Indicator variable = 1 if covariance estimate was PD. NA if bootstrap used}
 \item{boot}{Indicator variable = 1 if bootstrap was used to estimate variance}
 \item{est_vc}{Variance-covariance matrix used in variance simulation. NA if bootstrap used}
+\item{X}{Matrix of covariates}
+\item{Y}{Dependent variable vector}
+\item{formula}{Model formula}
 }
 \description{
 This function works similarly to \code{\link{lm}}. It takes a formula and data and
