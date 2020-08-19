@@ -348,8 +348,7 @@ function(){
 #' @param weight_vars A character vector with the names of count variables that make up the weights
 #' @param values A numeric vector of known constants associated with each count
 #' @return A new weighted average variable that can be added as a new column to the DP data frame
-#' @export
-
+#' @export waDP
 waDP <- function(data, weight_vars, values){
 
   # indeces of vars
