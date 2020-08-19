@@ -335,20 +335,15 @@ varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index
   }
 
 
-function(){
-
-}
-
-
 
 #' Weighted average variable
 #'
-#' This function that adds a weighted aaveraage column to dp data with appropriate standard deviation in first row for use in lmdp
+#' This function creates a weighted average vector that can be added as a column to dp data with appropriate standard deviation in first row for use in lmdp
 #' @param data DP data frame where first row is sd of dp noise
 #' @param weight_vars A character vector with the names of count variables that make up the weights
 #' @param values A numeric vector of known constants associated with each count
 #' @return A new weighted average variable that can be added as a new column to the DP data frame
-#' @export waDP
+#' @export
 waDP <- function(data, weight_vars, values){
 
   # indeces of vars
@@ -407,6 +402,25 @@ waDP <- function(data, weight_vars, values){
   return(c(sqrt(noise_var), w_avg))
 }
 
+
+#' Proportions variable
+#'
+#' This function creates a proportion vector that can be added as a column to dp data with appropriate standard deviation in first row for use in lmdp
+#' @param data DP data frame where first row is sd of dp noise
+#' @param numerator_var A character vector with the names of count variables that make up the weights
+#' @param denominator_vars A character vector with the names of count variables that make up the weights
+#' @return A new weighted average variable that can be added as a new column to the DP data frame
+#' @export
+propDP <- function(data, numerator_var, denominator_vars){
+
+  x1 <- as.numeric(data[-1, match(numerator, names(data))])
+  sum_xj <- as.numeric(apply(data[-1, match(denominator_vars, names(data))], 1, sum))
+  s1 <- as.numeric(data[1, match(numerator, names(data))])
+  sum_sj <-  sum(as.numeric(data[1, match(numerator, names(data))]))
+
+  noise_var <- mean(s1^2/((sum_xj)^2) - 2*x1/((sum_xj)^3)*s1^2 + x1^2/((sum_xj)^4)*(sum_sj))
+  return(c(sqrt(noise_var), x1/sum_xj))
+}
 
 
 

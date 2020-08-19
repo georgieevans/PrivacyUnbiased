@@ -17,5 +17,5 @@ waDP(data, weight_vars, values)
 A new weighted average variable that can be added as a new column to the DP data frame
 }
 \description{
-This function that adds a weighted aaveraage column to dp data with appropriate standard deviation in first row for use in lmdp
+This function creates a weighted average vector that can be added as a column to dp data with appropriate standard deviation in first row for use in lmdp
 }
