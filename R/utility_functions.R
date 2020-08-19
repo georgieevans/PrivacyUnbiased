@@ -343,8 +343,7 @@ function(){
 
 #' Weighted average variable
 #'
-#' This function takes repeated samples from the data to estimate a bootstrap
-#' distribution of \eqn{\tilde{\beta}} and b.
+#' This function that adds a weighted aaveraage column to dp data with appropriate standard deviation in first row for use in lmdp
 #' @param data DP data frame where first row is sd of dp noise
 #' @param weight_vars A character vector with the names of count variables that make up the weights
 #' @param values A numeric vector of known constants associated with each count
