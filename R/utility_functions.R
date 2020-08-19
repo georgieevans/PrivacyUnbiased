@@ -411,7 +411,7 @@ waDP <- function(data, weight_vars, values){
 #' @param denominator_vars A character vector with the names of count variables that make up the weights
 #' @return A new weighted average variable that can be added as a new column to the DP data frame
 #' @export
-propDP <- function(data, numerator_var, denominator_vars){
+propDP <- function(data, numerator, denominator_vars){
 
   x1 <- as.numeric(data[-1, match(numerator, names(data))])
   sum_xj <- as.numeric(apply(data[-1, match(denominator_vars, names(data))], 1, sum))
