@@ -10,7 +10,7 @@ distributionDP(variable, data, distributions, moments_fit = 6,
 \arguments{
 \item{variable}{Variable name in dataa}
 
-\item{data}{DP data (first row should contain sd of noise added to `variable``)}
+\item{data}{DP data (first row should contain sd of noise added to `variable`)}
 
 \item{distributions}{Vector of distributions to fit. Options include 'Normal', 'Poisson', 'NB', 'ZIP', 'ZINB'}
 

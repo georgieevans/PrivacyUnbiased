@@ -334,3 +334,82 @@ varianceBoot <- function(Y, X, S, nsims, N, int_vars, sq_vars, int1, int2, index
   return(boot_dist)
   }
 
+
+function(){
+
+}
+
+
+
+#' Weighted average variable
+#'
+#' This function takes repeated samples from the data to estimate a bootstrap
+#' distribution of \eqn{\tilde{\beta}} and b.
+#' @param data DP data frame where first row is sd of dp noise
+#' @param weight_vars A character vector with the names of count variables that make up the weights
+#' @param values A numeric vector of known constants associated with each count
+#' @return A new weighted average variable that can be added as a new column to the DP data frame
+#' @export
+
+waDP <- function(data, weight_vars, values){
+
+  # indeces of vars
+  x_index <- match(weight_vars, colnames(data))
+
+  # Raw noise vector
+  s_vec <- as.numeric(data[1, x_index])^2
+
+  data <- data[-1, ]
+
+  # sum x_j
+  sum_xj <- as.numeric(apply(data[, x_index], 1, sum))
+
+  sum_xjp <- matrix(NA, nrow(data), length(x_index))
+  ratio_mat <- matrix(NA, nrow(data), length(x_index))
+  deriv_matrix <- matrix(NA, nrow(data), length(x_index))
+
+  for (j in 1:length(x_index)) {
+
+    ratio_mat[, j] <- data[, x_index[j]]/sum_xj
+
+    deriv_matrix[, j] <- -values[j]*data[, x_index[j]]/(sum_xj)^2
+
+    if(length(x_index) > 2){
+
+      sum_xjp[, j] <- as.numeric(apply(data[, x_index[-j]], 1, sum))
+
+    } else {
+
+      sum_xjp[, j] <- as.numeric(data[, x_index[-j]])
+    }
+
+  }
+
+
+  sum_j <- matrix(NA, nrow(data), length(x_index))
+
+  for (j in 1:length(x_index)) {
+
+    if(length(x_index) > 2) {
+
+      sum_j[, j] <-  (as.numeric(apply(deriv_matrix[, -j], 1, sum)) + values[j]*sum_xjp[,j]/(sum_xj^2))^2*s_vec[j]
+
+    } else {
+
+      sum_j[, j] <-  (as.numeric(deriv_matrix[, -j]) + values[j]*sum_xjp[,j]/(sum_xj^2))^2*s_vec[j]
+    }
+
+  }
+
+  noise_var <- mean( apply(sum_j, 1, sum) )
+  w_avg <- apply(sweep(ratio_mat, MARGIN=2, values, `*`), 1, sum)
+
+  # return WA column for dp data
+
+  return(c(sqrt(noise_var), w_avg))
+}
+
+
+
+
+
