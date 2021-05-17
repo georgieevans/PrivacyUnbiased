@@ -14,7 +14,7 @@ Read an overview of the package:
 
 <https://github.com/georgieevans/PrivacyUnbiased/blob/master/Example/Example.pdf> 
 
-PrivacyUnbiased provides methods to analyze differentially private data. For a system to release differentially private statistics from privacy protected data, see UnbiasedPrivacy: 
+`PrivacyUnbiased` provides methods to analyze differentially private data. For a system to release differentially private statistics from privacy protected data as presented in https://gking.harvard.edu/files/gking/files/udp.pdf, see our software `UnbiasedPrivacy`: 
 
 https://github.com/schwenzfeier/udp
-https://gking.harvard.edu/files/gking/files/udp.pdf
+
